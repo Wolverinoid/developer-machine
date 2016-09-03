@@ -12,7 +12,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "forwarded_port", guest: 80, host: 80
 
   #config.vm.synced_folder "/Users/aleksandr.ivanov/Projects", "/project", id: "vagrant-root", :nfs => true
-  config.vm.synced_folder "/Users/aleksandr.ivanov/Projects", "/project", 
+  config.vm.synced_folder "/host_machine/folder", "/virtual_machine/folder",
   :mount_options => ["dmode=777", "fmode=666"]
 
   config.vm.provision "ansible" do |ansible|
