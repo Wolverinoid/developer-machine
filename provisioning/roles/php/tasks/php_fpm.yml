@@ -1,0 +1,35 @@
+---
+# Tasks for install php_fpm
+- name: Install PHP-FPM
+  apt: name=php{{ php_major_version }}-fpm state=present
+
+- name: Configure PHP-FPM
+  lineinfile:
+    dest: "{{ php_fpm_pool_config_path }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - regexp: "^user.?=.+$"
+      line: "user = {{ php_fpm_pool_user }}"
+    - regexp: "^group.?=.+$"
+      line: "group = {{ php_fpm_pool_group }}"
+    - regexp: "^listen.?=.+$"
+      line: "listen = {{ php_fpm_listen }}"
+    - regexp: '^pm\.max_children.?=.+$'
+      line: "pm.max_children = {{ php_fpm_pm_max_children }}"
+  notify: restart php-fpm
+
+- name: Remove Apache from system
+  apt: name=apache2 state=absent
+
+- name: Configure php.ini
+  lineinfile:
+    dest: "{{ php_fpm_ini_path }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - regexp: "^short_open_tag.?=.+$"
+      line: "short_open_tag = On"
+  notify: restart php-fpm

@@ -1,0 +1,10 @@
+---
+- hosts: all
+  sudo: yes
+  roles:
+    - users
+    - common
+    - php
+    - nginx
+    - ANXS.postgresql
+  vars:

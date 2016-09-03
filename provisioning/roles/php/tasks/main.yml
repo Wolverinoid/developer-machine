@@ -1,0 +1,17 @@
+---
+# Tasks for install php
+- name: Register PHP repository
+  apt_repository: repo="ppa:ondrej/{{ php_package }}" validate_certs=false
+
+- name: Install Main PHP Package
+  apt: name=php{{ php_major_version }} state=present
+
+- name: Install PHP Extensions
+  apt: name={{ item }} state=present allow_unauthenticated=yes
+  with_items:
+    "{{ php_extensions }}"
+
+- include: php_fpm.yml
+  when: php_fpm is defined and php_fpm
+
+- include: composer.yml

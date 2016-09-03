@@ -1,0 +1,85 @@
+os_distribution: ubuntu
+os_distribution_release: trusty
+os_usr_bin_dir: /usr/bin
+os_usr_lib_dir: /usr/local/lib
+
+# ----------------- TimeZone Settings ----------
+locale: en_US.UTF-8
+timezone: Europe/Moscow
+# ----------------------------------------------
+
+# ----------------- Users Settings --------------
+users:
+  - username:
+    name:
+    home_create: yes
+    home_mode: "0750"
+    home:
+    shell: /bin/bash
+    groups: ["sudo"]
+    authorized_keys:
+      - ssh-rsa
+    sudoers:
+      - ALL=(ALL) NOPASSWD:ALL
+
+# -------------------------
+project_user: aivanov
+os_common_packages: []
+# ------------------ PHP Settings ----------------
+php_extensions:
+  - php5-json
+  - php5-curl
+  - php5-redis
+  - php5-cli
+  - php5-apcu
+  - php5-pgsql
+php_fpm_listen: /var/run/php5-fpm.sock
+# ------------------------------------------------
+# ------------------- NGINX Settings -------------
+nginx_vhosts:
+  - name: default
+    listen_port: 80
+    server_name: localhost
+    access_log: /var/log/nginx/host.access.log  main
+    locations:
+      - name: root
+        mask: /
+        root: /usr/share/nginx/html
+        file_index: index.html index.htm
+  - name: ms
+    listen_port: 80
+    server_name: ms.loc
+    access_log: /var/log/nginx/ms.access.log  main
+    fpm:
+       root: /project/ms/backend/www
+       index: index.php
+       source: unix:/var/run/php5-fpm.sock
+    locations:
+      - name: root
+        mask: /
+        root: /project/ms/backend/www
+        file_index: index.php index.html index.htm
+        try_files: $uri $uri/ /index.php?$args;
+# ------------------------------------------------
+# --------------------- PostgreSQL ---------------
+postgresql_version: 9.5
+postgresql_encoding: 'UTF-8'
+postgresql_locale: 'en_US.UTF-8'
+postgresql_admin_user: "postgres"
+postgresql_default_auth_method: "trust"
+postgresql_cluster_name: "main"
+postgresql_cluster_reset: false
+postgresql_users:
+  - name: ms
+    pass: ms
+    encrypted: no       # denotes if the password is already encrypted.
+# List of user privileges to be applied (optional)
+postgresql_user_privileges:
+  - name: ms                   # user name
+    db: ms                 # database
+    priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+    role_attr_flags: "CREATEDB" # role attribute flags
+postgresql_databases:
+  - name: ms
+    owner: ms
+# ------------------------------------------------

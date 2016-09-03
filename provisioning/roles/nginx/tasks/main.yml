@@ -1,0 +1,22 @@
+---
+# Setup nginx
+
+- name: Ensure API official nginx key
+  apt_key: url="http://nginx.org/keys/nginx_signing.key"
+
+- name: Ensure API official nginx repository
+  apt_repository: repo="deb http://nginx.org/packages/mainline/{{ os_distribution }}/ {{ os_distribution_release }} nginx"
+
+- name: Install nginx packages
+  apt: name=nginx state=present
+
+- name: Register nginx web server
+  user: name=nginx append=yes groups={{ nginx_user_group }}
+
+- name: Install virtual hosts
+  template:
+    src: vhost.j2
+    dest: "{{ nginx_vhosts_folder }}/{{ item.name }}.conf"
+  with_items: "{{ nginx_vhosts }}"
+  notify:
+    reload nginx

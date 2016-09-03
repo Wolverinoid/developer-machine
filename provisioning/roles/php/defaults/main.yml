@@ -1,0 +1,20 @@
+---
+# defaults file for php
+
+# PHP Default parameters
+php_major_version: 5
+php_package: php5-5.6
+php_version: 5.6
+php_extensions:
+  - php5-common
+  - php5-json
+
+# PHP-FPM parameters
+php_fpm: true
+php_fpm_pool_config_path: /etc/php5/fpm/pool.d/www.conf
+php_fpm_pool_user: www-data
+php_fpm_pool_group: www-data
+php_fpm_listen: /var/run/php5-fpm.sock
+php_fpm_pm_max_children: 5
+php_fpm_daemon: php5-fpm
+php_fpm_ini_path: /etc/php5/fpm/php.ini

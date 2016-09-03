@@ -1,0 +1,17 @@
+---
+# tasks file for common
+- name: set locale
+  command: /usr/sbin/update-locale LANG={{ locale }} LC_ALL={{ locale }}
+
+
+- name: set /etc/timezone
+  template: src=timezone.j2 dest=/etc/timezone
+  notify: update tzdata
+
+- name: Install common packages
+  apt: name={{ item }} state=present allow_unauthenticated=yes
+  with_items:
+    "{{ os_common_packages }}"
+
+- name: Setup projects folder
+  file: path={{ projects_folder }} state=directory owner={{ project_user }} group={{ project_user }}

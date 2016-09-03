@@ -1,0 +1,52 @@
+server {
+    listen       {{ item.listen_port }};
+    server_name  {{ item.server_name }};
+
+    access_log  {{ item.access_log }};
+
+    {% for location in item.locations %}
+    location {{ location.mask }} {
+        root {{ location.root }};
+        index {{ location.file_index }};
+        {% if 'try_files' in location %}
+        try_files {{ location.try_files }}
+        {% endif %}
+    }
+    {% endfor %}
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    {% if 'fpm' in item %}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    location ~ \.php$ {
+        root           {{ item.fpm.root }};
+        fastcgi_pass   {{ item.fpm.source }};
+        fastcgi_index  {{ item.fpm.index }};
+        fastcgi_param  SCRIPT_FILENAME  {{ item.fpm.root }}$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+
+    {% endif %}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+}
