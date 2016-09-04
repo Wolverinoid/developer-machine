@@ -19,6 +19,7 @@ With developer-machine you can use following components:
 * PHP
 * NGINX
 * PostgreSQL
+* NodeJS
 
 Installation is based on **ubuntu/trusty64** virtualbox image.
 
@@ -92,9 +93,20 @@ os_usr_bin_dir: /usr/bin
 os_usr_lib_dir: /usr/local/lib
 ```
 
-You can find more config files inside of each ansible role inside **provision** folder. 
+You can find more config files inside of each ansible role inside **provision** folder.
+ 
+**NodeJS**
 
-Rename example to all 
+NodeJS roles uses [nodesource](https://github.com/nodesource) prepared packages for NodeJS.
+To install nodejs make sure you have set following variables:
+
+**nodejs_version**: 5 (4, 5, 6)
+
+**debian_repo_version**: 5.x (4.x, 5.x, 6.x)
+
+Rename example to all
+ 
+**Build Virtual Machine**
 
 To build virtual machine just run:
 

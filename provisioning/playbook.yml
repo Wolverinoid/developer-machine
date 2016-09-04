@@ -7,4 +7,5 @@
     - php
     - nginx
     - ANXS.postgresql
+    - nodejs
   vars:
