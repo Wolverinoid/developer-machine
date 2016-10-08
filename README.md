@@ -89,7 +89,7 @@ Configure your virtual machine name:
 ```ruby
  config.vm.provider :virtualbox do |vb|
      vb.name = "your_machine_name"
-   end
+ end
 
 ```
 
