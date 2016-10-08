@@ -15,6 +15,10 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "/host_machine/folder", "/virtual_machine/folder",
   :mount_options => ["dmode=777", "fmode=666"]
 
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "developer_machine"
+  end
+
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "provisioning/playbook.yml"
   end

@@ -84,6 +84,18 @@ In the **vagrantfile** specify folder where your projects will be placed:
   :mount_options => ["dmode=777", "fmode=666"]
 ```
 
+Configure your virtual machine name:
+
+```ruby
+ config.vm.provider :virtualbox do |vb|
+     vb.name = "your_machine_name"
+   end
+
+```
+
+Then you need yo specify special settings for the VM. At first rename 
+**provisioning/group_vars/example** to **provisioning/group_vars/all**. 
+
 Here is setup for linux versions and main system folders:
 
 ```sh
